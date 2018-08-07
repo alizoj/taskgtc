@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  * @property string $authKey
+ * @property Application[] $applications
  * @property string $auth_token [varchar(255)]
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -38,24 +39,50 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function behaviors()
+    public function rules()
     {
         return [
-            TimestampBehavior::className(),
+            [['email', 'auth_key', 'password_hash', 'created_at', 'updated_at'], 'required'],
+            [['status'], 'integer'],
+            [['email', 'password_hash'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 32],
+            [['created_at', 'updated_at'], 'safe'],
+            [['email'], 'unique'],
+            [['email'], 'email'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ADMIN, self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function behaviors()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [
+                'class' => TimestampBehavior::className(),
+                'value' => date('Y-m-d H:i:s'),
+            ],
         ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'email'      => 'Email',
+            'created_at' => 'Создан',
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function login()
+    {
+        return Yii::$app->user->login($this, 3600 * 24 * 30);
     }
 
     /**
@@ -63,7 +90,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id, 'status' => [self::STATUS_ADMIN, self::STATUS_ACTIVE]]);
     }
 
     /**
@@ -75,52 +102,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
-     * @param string $username
+     * @param string $email
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsername($email)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-    }
-
-    /**
-     * Finds user by password reset token
-     *
-     * @param string $token password reset token
-     * @return static|null
-     */
-    public static function findByPasswordResetToken($token)
-    {
-        if (!static::isPasswordResetTokenValid($token))
-        {
-            return null;
-        }
-
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status'               => self::STATUS_ACTIVE,
-        ]);
-    }
-
-    /**
-     * Finds out if password reset token is valid
-     *
-     * @param string $token password reset token
-     * @return bool
-     */
-    public static function isPasswordResetTokenValid($token)
-    {
-        if (empty($token))
-        {
-            return false;
-        }
-
-        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
-        $expire    = Yii::$app->params['user.passwordResetTokenExpire'];
-
-        return $timestamp + $expire >= time();
+        return static::findOne(['email' => $email, 'status' => [self::STATUS_ACTIVE, self::STATUS_ADMIN]]);
     }
 
     /**
@@ -191,5 +180,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function removeAuthToken()
     {
         $this->auth_token = null;
+    }
+
+    public function getApplications()
+    {
+        return $this->hasMany(Application::className(), ['user_id' => 'id']);
     }
 }

@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Application;
+use common\models\User;
 
 /**
- * ApplicationSearch represents the model behind the search form of `common\models\Application`.
+ * UserSearch represents the model behind the search form of `common\models\User`.
  */
-class ApplicationSearch extends Application
+class UserSearch extends User
 {
     /**
      * {@inheritdoc}
@@ -18,11 +18,10 @@ class ApplicationSearch extends Application
     public function rules()
     {
         return [
-            [['id', 'user_id', 'status',], 'integer'],
-            [['FIO', 'phone_number', 'message', 'created_at', 'updated_at', 'email'], 'safe'],
+            [['id', 'status'], 'integer'],
+            [['email', 'auth_key', 'password_hash', 'auth_token', 'created_at', 'updated_at'], 'safe'],
         ];
     }
-
 
     /**
      * {@inheritdoc}
@@ -42,13 +41,12 @@ class ApplicationSearch extends Application
      */
     public function search($params)
     {
-        $query = Application::find()->joinWith('user');
+        $query = User::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['attributes' => ['id', 'FIO', 'phone_number', 'message', 'created_at', 'updated_at', 'email']]
         ]);
 
         $this->load($params);
@@ -61,16 +59,16 @@ class ApplicationSearch extends Application
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'application.id' => $this->id,
-            'application.status' => $this->status,
-            'application.created_at' => $this->created_at,
-            'application.updated_at' => $this->updated_at,
+            'id' => $this->id,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'FIO', $this->FIO])
-            ->andFilterWhere(['like', 'phone_number', $this->phone_number])
-            ->andFilterWhere(['like', 'user.email', $this->email])
-            ->andFilterWhere(['like', 'message', $this->message]);
+        $query->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
+            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
+            ->andFilterWhere(['like', 'auth_token', $this->auth_token]);
 
         return $dataProvider;
     }

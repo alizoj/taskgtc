@@ -2,52 +2,38 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Администраторская часть';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+    <div class="row">
+        <div class="jumbotron">
+            <h1>Администраторская часть</h1>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
+            <div class="col-md-9 col-md-offset-3">
 
-    <div class="body-content">
+                <p class="lead" align="left">Движок Yii2 имеет следующие преимущества:</p>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                <ul style="text-align: left">
+                    <li>Надежность</li>
+                    <li>Легкое восприятие кода и документации</li>
+                    <li>Много дополнительных модулей и виджетов (<a href="http://demos.krajee.com" target="_blank">расширений</a>)
+                    </li>
+                    <li>Большая аудитория поддерживателей (<a href="https://github.com/yiisoft/yii2/network/members">contributors</a>,
+                        около 6 500 форков (внесений изменений от независимых разработчиков)), следовательно
+                        усовершенствуется постоянно
+                    </li>
+                    <li>Много дополнительных модулей и виджетов (расширений)</li>
+                </ul>
+                <br>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Ссылка на Yii2</a></p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
         </div>
 
     </div>
+
+
 </div>

@@ -3,11 +3,12 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ApplicationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Applications';
+$this->title                   = 'Заявки';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="application-index">
@@ -16,18 +17,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Application', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
+        'filterModel'  => $searchModel,
+        'columns'      => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'user_id',
+            [
+                'attribute' => 'email',
+                'value'     => function (\common\models\Application $model)
+                {
+                    return $model->user->email;
+                },
+            ],
             'FIO',
             'phone_number',
             'message',
